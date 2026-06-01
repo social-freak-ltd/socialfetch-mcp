@@ -1,0 +1,9 @@
+{
+  "mcp": {
+    "servers": {
+      "socialfetch": {
+        "url": "https://api.socialfetch.dev/mcp"
+      }
+    }
+  }
+}

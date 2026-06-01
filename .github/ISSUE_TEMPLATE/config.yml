@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Social Fetch documentation
+    url: https://www.socialfetch.dev/docs/integrations/mcp
+    about: Read the MCP setup guide and troubleshooting notes.
+  - name: Social Fetch support
+    url: https://www.socialfetch.dev
+    about: Contact Social Fetch for account, billing, OAuth, or API access issues.
