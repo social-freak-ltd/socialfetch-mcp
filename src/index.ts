@@ -23,7 +23,7 @@ import {
 	type ServerCapabilities,
 } from "@modelcontextprotocol/sdk/types.js";
 
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 const DEFAULT_MCP_URL = "https://api.socialfetch.dev/mcp";
 const KEY_HELP =
 	"Set SOCIALFETCH_API_KEY to a Social Fetch API key (sfk_…). Create one at https://app.socialfetch.dev in API Keys.";

@@ -1,6 +1,6 @@
 {
   "name": "@socialfetch/mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Social Fetch MCP server over stdio. Uses your SOCIALFETCH_API_KEY to call the hosted Social Fetch tools.",
   "license": "MIT",
   "type": "module",
