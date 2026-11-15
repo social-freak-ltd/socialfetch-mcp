@@ -37,7 +37,7 @@ The MCP server itself is hosted by Social Fetch:
 https://api.socialfetch.dev/mcp
 ```
 
-There is no local server to clone, build, or run from this repository. Clients connect to the hosted Streamable HTTP endpoint and authenticate with OAuth in the browser.
+Most clients connect to that hosted Streamable HTTP endpoint and sign in with OAuth in the browser. For clients that only run local stdio servers, this repository also contains a small stdio server that authenticates with an API key (see [Local stdio Server](#local-stdio-server)).
 
 ## Why Use It?
 
@@ -130,13 +130,41 @@ Authorize Social Fetch when Claude prompts you.
 
 ### stdio-only Clients
 
-If your client only supports stdio MCP servers, bridge to the hosted server with `mcp-remote`:
+If your client only runs local stdio servers, use the [local stdio server](#local-stdio-server) in this repository.
+
+## Local stdio Server
+
+`src/index.ts` is a stdio MCP server. It runs on your machine, reads `SOCIALFETCH_API_KEY` from the environment, and sends each request to the hosted server with that key as `x-api-key`. Tools, schemas, and results are the same as the hosted server's, and credits are charged to the key's workspace.
+
+Build it (Node.js 18 or later):
 
 ```bash
-npx mcp-remote https://api.socialfetch.dev/mcp
+git clone https://github.com/social-freak-ltd/socialfetch-mcp.git
+cd socialfetch-mcp
+npm ci
+npm run build
 ```
 
-Point your client at the stdio process that command starts.
+Then point your client at it. For example, in Claude Desktop's `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "socialfetch": {
+      "command": "node",
+      "args": ["/path/to/socialfetch-mcp/dist/index.js"],
+      "env": { "SOCIALFETCH_API_KEY": "sfk_..." }
+    }
+  }
+}
+```
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `SOCIALFETCH_API_KEY` | Yes | A Social Fetch API key (`sfk_...`) from the API Keys dashboard. |
+| `SOCIALFETCH_MCP_URL` | No | Override the upstream MCP URL, for testing. Defaults to `https://api.socialfetch.dev/mcp`. |
+
+Keep the key out of shared or committed config files.
 
 ## Authentication
 
@@ -146,7 +174,7 @@ Social Fetch MCP uses OAuth 2.1. Your MCP client handles the flow:
 2. You sign in or create an account and approve access.
 3. The client receives an access token and sends it with each MCP request.
 
-Do not paste a Social Fetch API key into MCP config. Credits are charged to the signed-in account, just like REST API requests.
+The hosted server uses OAuth, so you don't need an API key in your MCP config. The local stdio server is the exception: it needs `SOCIALFETCH_API_KEY`. Credits are charged to the signed-in account, just like REST API requests.
 
 ## Tools
 
@@ -193,15 +221,16 @@ The result contains the same `data` and `meta` envelope returned by the REST API
 | OAuth redirect loop | Finish signing in at Social Fetch, then approve access to return to your client. |
 | `402` responses | Your account is out of credits for the metered route. Top up in [Credits & billing](https://www.socialfetch.dev/docs/credits). |
 | No tools listed | Reconnect the server. If it persists, restart your MCP client. |
-| Client only supports stdio | Use `npx mcp-remote https://api.socialfetch.dev/mcp`. |
+| Client only supports stdio | Use the [local stdio server](#local-stdio-server) with `SOCIALFETCH_API_KEY` set. |
 
 ## Repository Contents
 
 - `server.json` - MCP Registry metadata for the hosted remote server.
+- `src/index.ts` - The local stdio server (`npm run build` writes `dist/index.js`).
 - `examples/` - Copy-paste MCP client configuration snippets.
 - `assets/socialfetch-mark.svg` - Local copy of the Social Fetch mark (also served at `https://api.socialfetch.dev/mcp/icon.svg`).
 
-The implementation lives in Social Fetch's private API service, not in this public listing repository.
+The tools themselves are implemented in Social Fetch's private API service; the stdio server forwards to it.
 
 ## Related
 
