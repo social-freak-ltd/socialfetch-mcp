@@ -1,0 +1,33 @@
+{
+  "name": "@socialfetch/mcp",
+  "version": "1.0.0",
+  "description": "Social Fetch MCP server over stdio. Uses your SOCIALFETCH_API_KEY to call the hosted Social Fetch tools.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "socialfetch-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": ["dist", "README.md", "LICENSE"],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/social-freak-ltd/socialfetch-mcp.git"
+  },
+  "homepage": "https://www.socialfetch.dev/docs/integrations/mcp",
+  "keywords": ["mcp", "model-context-protocol", "social-media", "scraper", "api", "tiktok", "instagram", "youtube"],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0"
+  }
+}
